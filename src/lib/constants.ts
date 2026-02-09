@@ -92,3 +92,13 @@ export const PROCESSING_STAGES = [
   { type: 'dive_log_generation', label: 'Creating dive log', icon: 'FileText' },
   { type: 'thumbnail_generation', label: 'Creating thumbnails', icon: 'Image' },
 ] as const
+
+// Pipeline stages mapped to progress percentages (for single-job Modal pipeline)
+export const PIPELINE_STAGES = [
+  { label: 'Downloading video', icon: 'Download', minProgress: 0, maxProgress: 5 },
+  { label: 'Extracting frames', icon: 'Film', minProgress: 5, maxProgress: 15 },
+  { label: 'Analyzing frames', icon: 'Fish', minProgress: 15, maxProgress: 55 },
+  { label: 'Selecting highlights', icon: 'Star', minProgress: 55, maxProgress: 70 },
+  { label: 'Generating clips', icon: 'Scissors', minProgress: 70, maxProgress: 90 },
+  { label: 'Saving results', icon: 'CheckCircle', minProgress: 90, maxProgress: 100 },
+] as const

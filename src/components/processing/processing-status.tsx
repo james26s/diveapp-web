@@ -4,7 +4,7 @@ import { useProcessingStatus } from '@/hooks/use-processing-status'
 import { Progress } from '@/components/ui/progress'
 import { Badge } from '@/components/ui/badge'
 import { CheckCircle2, Loader2, AlertCircle, Clock } from 'lucide-react'
-import { PROCESSING_STAGES } from '@/lib/constants'
+import { PROCESSING_STAGES, PIPELINE_STAGES } from '@/lib/constants'
 import type { ProcessingJob } from '@/types/domain'
 import { cn } from '@/lib/utils'
 
@@ -25,6 +25,9 @@ export function ProcessingStatus({ videoId }: ProcessingStatusProps) {
   }
 
   if (jobs.length === 0) return null
+
+  // Determine mode: single-job (Modal pipeline) vs multi-job (mock)
+  const isSingleJobMode = jobs.length === 1
 
   return (
     <div className="space-y-4">
@@ -50,18 +53,72 @@ export function ProcessingStatus({ videoId }: ProcessingStatusProps) {
       {isProcessing && <Progress value={overallProgress} className="h-1.5" />}
 
       <div className="space-y-2">
-        {PROCESSING_STAGES.map((stage) => {
-          const job = jobs.find((j) => j.type === stage.type)
-          return (
-            <ProcessingStageRow
-              key={stage.type}
-              label={stage.label}
-              job={job}
-            />
-          )
-        })}
+        {isSingleJobMode ? (
+          <PipelineStages job={jobs[0]} />
+        ) : (
+          PROCESSING_STAGES.map((stage) => {
+            const job = jobs.find((j) => j.type === stage.type)
+            return (
+              <ProcessingStageRow
+                key={stage.type}
+                label={stage.label}
+                job={job}
+              />
+            )
+          })
+        )}
       </div>
     </div>
+  )
+}
+
+function PipelineStages({ job }: { job: ProcessingJob }) {
+  const progress = job.progress
+  const jobStatus = job.status
+
+  return (
+    <>
+      {PIPELINE_STAGES.map((stage) => {
+        let status: 'completed' | 'running' | 'pending' | 'failed'
+        if (jobStatus === 'failed') {
+          status = progress >= stage.maxProgress ? 'completed' : progress >= stage.minProgress ? 'failed' : 'pending'
+        } else if (progress >= stage.maxProgress) {
+          status = 'completed'
+        } else if (progress >= stage.minProgress) {
+          status = 'running'
+        } else {
+          status = 'pending'
+        }
+
+        return (
+          <div key={stage.label} className="flex items-center gap-3 text-sm">
+            <div className={cn(
+              'flex h-6 w-6 items-center justify-center rounded-full',
+              status === 'completed' && 'bg-emerald-500/10 text-emerald-600',
+              status === 'running' && 'bg-primary/10 text-primary',
+              status === 'failed' && 'bg-destructive/10 text-destructive',
+              status === 'pending' && 'bg-muted text-muted-foreground',
+            )}>
+              {status === 'completed' && <CheckCircle2 className="h-3.5 w-3.5" />}
+              {status === 'running' && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+              {status === 'failed' && <AlertCircle className="h-3.5 w-3.5" />}
+              {status === 'pending' && <Clock className="h-3.5 w-3.5" />}
+            </div>
+            <span className={cn(
+              status === 'completed' && 'text-foreground',
+              status === 'running' && 'font-medium text-foreground',
+              status === 'pending' && 'text-muted-foreground',
+              status === 'failed' && 'text-destructive',
+            )}>
+              {stage.label}
+            </span>
+            {status === 'running' && (
+              <span className="ml-auto text-xs text-muted-foreground">{progress}%</span>
+            )}
+          </div>
+        )
+      })}
+    </>
   )
 }
 
