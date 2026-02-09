@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --version:*)",
+      "Bash(npm --version:*)",
+      "Bash(pnpm:*)",
+      "WebSearch",
+      "WebFetch(domain:www.opus.pro)",
+      "WebFetch(domain:www.capcut.com)",
+      "WebFetch(domain:opus.pro)",
+      "WebFetch(domain:www.opusclip.com)",
+      "WebFetch(domain:max-productive.ai)",
+      "WebFetch(domain:ixd.prattsi.org)",
+      "WebFetch(domain:www.mygamingdiaries.com)",
+      "WebFetch(domain:help.opus.pro)",
+      "WebFetch(domain:www.eesel.ai)",
+      "WebFetch(domain:www.banuba.com)",
+      "WebFetch(domain:diyvideoeditor.com)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest init:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npm run type-check:*)",
+      "Bash(npx tsc:*)",
+      "Bash(node /Users/user/projects/diveapp/web/node_modules/typescript/lib/tsc.js:*)",
+      "Bash(node node_modules/typescript/lib/tsc.js:*)",
+      "Bash(node -e:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm rebuild:*)",
+      "Bash(gh auth status:*)",
+      "Bash(brew install:*)",
+      "Bash(command -v npm:*)",
+      "Bash(curl:*)",
+      "Bash(unzip:*)",
+      "Bash(export PATH=\"/tmp/gh/gh_2.65.0_macOS_arm64/bin:$PATH\")",
+      "Bash(gh auth:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}
